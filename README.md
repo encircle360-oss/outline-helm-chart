@@ -1,5 +1,5 @@
 # Outline wiki helm chart
-This helm chart provides you with a ready to use outline wiki stack ready to deploy in your kubernetes cluster.
+This helm chart provides you with a ready to use [outline wiki](https://github.com/outline/outline) stack ready to deploy in your kubernetes cluster.
 It provides:
  - Outline
  - PostgreSQL
