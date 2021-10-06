@@ -41,7 +41,7 @@ postgresql:
 
 minio:
   enabled: true
-  disableWebUI: true
+  disableWebUI: false
   ingress:
     enabled: true
     hostname: data.outline.yourdomain.tld
