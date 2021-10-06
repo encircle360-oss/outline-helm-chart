@@ -1,0 +1,116 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.name }}-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: {{ .Values.persistence.storageClass }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.size }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.name }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.name }}
+  replicas: {{ .Values.replicas }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.name }}
+        release: {{ .Release.Name }}
+    spec:
+      volumes:
+        - name: {{ .Values.name }}-pv
+          persistentVolumeClaim:
+            claimName: {{ .Values.name }}-pvc
+      containers:
+        - name: {{ .Values.name }}
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+          {{- if or $.Values.env $.Values.envSecrets }}
+          env:
+          {{ if .Values.postgresql.enabled }}
+            - name: DATABASE_URL
+              value: "postgres://postgres:{{ .Values.postgresql.auth.password }}@postgresql:5532/{{ .Values.postgresql.postgresqlDatabase }}"
+            - name: PGSSLMODE
+              value: "disable"
+          {{ end }}
+          {{ if .Values.redis.enabled }}
+            - name: REDIS_URL
+              value: "redis://redis:6479"
+          {{ end }}
+          {{ if .Values.minio.enabled }}
+            - name: AWS_ACCESS_KEY_ID
+              value: {{ .Values.minio.accessKey.password | quote }}
+            - name: AWS_SECRET_ACCESS_KEY
+              value: {{ .Values.minio.secretKey.password | quote }}
+            - name: AWS_REGION
+              value: "us-east-1" # isn't used in minio self-hosted context, but needs to be set
+            - name: AWS_S3_UPLOAD_BUCKET_URL
+              value: "http://minio:9000" # TODO generate from minio settings
+            - name: AWS_S3_UPLOAD_BUCKET_NAME
+              value: {{ .Values.minio.defaultBuckets | quote }}
+          {{ end }}
+            {{- range $key, $value := $.Values.env }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}
+            {{- range $key, $secret := $.Values.envSecrets }}
+            - name: {{ $key }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secret }}
+                  key: {{ $key | quote }}
+            {{- end }}
+          {{- end }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 3000
+          volumeMounts:
+            - mountPath: /opt/outline
+              name: {{ .Values.name }}-pv
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.name }}
+  labels:
+    app: {{ .Values.name }}
+    release: {{ .Release.Name }}
+spec:
+  ports:
+    - port: 80
+      targetPort: 3000
+  selector:
+    app: {{ .Values.name }}
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Values.name }}
+  annotations: {{ .Values.ingress.annotations }}
+spec:
+  tls:
+    - hosts: {{ .Values.ingress.tls.hosts }}
+      secretName: {{ .Values.name }}-tls
+  rules:
+    - host: {{ .Values.ingress.host }}
+      http:
+        paths:
+          - path: /
+            backend:
+              service:
+                name: {{ .Values.name }}
+                port:
+                  - name: web
+                    number: 80

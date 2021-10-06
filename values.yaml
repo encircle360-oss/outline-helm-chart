@@ -1,0 +1,58 @@
+name: outline
+image:
+  repository: outlinewiki/outline
+  tag: 0.59.0
+  pullPolicy: IfNotPresent
+replicas: 1
+persistence:
+  storageClass: ""
+  size: 1Gi
+env: {}
+envSecrets: {}
+ingress:
+  host: outline
+  annotations: {}
+  tls:
+    enabled: false
+    hosts:
+      - outline
+
+redis:
+  enabled: true
+
+postgresql:
+  enabled: true
+  architecture: "standalone"
+  postgresqlDatabase: "outline"
+  auth:
+    enabled: true
+    password: "Ma#wXFMz6jFqXUr^qP&K66XQbd" # MUST be replaced with some secret password! Don't use this in production
+  persistence:
+    enabled: true
+    storageClass: ""
+    size: 1Gi
+
+minio:
+  enabled: true
+  disableWebUI: false
+  ingress:
+    enabled: false
+    # hostname: some-hostname
+    # certManager: true
+    # tls: true
+    # annotations:
+      # cert-manager.io/cluster-issuer: "letsencrypt-production"
+      # nginx.ingress.kubernetes.io/proxy-body-size: "15g"
+      # nginx.ingress.kubernetes.io/proxy-read-timeout: "7200"
+  mode: "standalone"
+  defaultBuckets: "outline"
+  secretKey:
+    password: "Uk4LuwVFvRDiG6k4nYA5C^835V" # MUST be replaced with some custom generated secret! Don't use this in production
+  accessKey:
+    password: "zFPVNNK*QNp3^V4J38Gy76SehG" # MUST be replaced with some custom generated access_key! Don't use this in production
+  persistence:
+    enabled: true
+    storageClass: ""
+    size: 2Gi
+
+
