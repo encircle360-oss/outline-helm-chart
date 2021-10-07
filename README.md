@@ -14,7 +14,7 @@ You are also able to re-configure most of all settings from the provided depende
 At first check all variables that need to be set, especially the credentials and secrets within the [values.yaml](values.yaml).
 Do only use self-generated secrets and credentials for production environments.
 ```
-helm upgrade --install -n outline --create-namespace --set postgresql.postgresqlPassword=some-secret-db-pass,postgresql.postgresqlPostgresPassword=some-secret-admin-db-pass,minio.secretKey.password=some-secret-s3-secret,minio.accessKey.password=some-secret-s3-accesskey,env.SLACK_SECRET=slack-oidc-secret,SLACK_KEY=slack-oidc-key outline ./
+helm upgrade --install -n outline --create-namespace --set postgresql.postgresqlPassword=some-secret-db-pass,postgresql.postgresqlPostgresPassword=some-secret-admin-db-pass,minio.secretKey.password=some-secret-s3-secret,minio.accessKey.password=some-secret-s3-accesskey,env.SLACK_SECRET=slack-oidc-secret,env.SLACK_KEY=slack-oidc-key outline ./
 ```
 
 To find out more configuration possibilities also check the [values.yaml](values.yaml).
