@@ -65,6 +65,17 @@ minio:
     size: 30Gi
 ```
 
+## Tips
+If you have problems with loading images or some kind of contentType mismatch while loading avatars or images there might be some fix you need to apply to minio s3 server.
+Open a shell in the minio pod/container or connect with a minio mc client to the minio server and execute the following policies.
+This bugfix is also documented [here](https://github.com/outline/outline/issues/1236#issuecomment-780542120).
+### Example within the minio pod (e.g. minio runs on localhost)
+```
+mc alias set minio http://localhost:9000 your-minio-access-key your-minio-secret
+mc policy set public minio/ol-data/public
+```
+The path for the policy targets the `public` directory in the outline s3 bucket.
+
 ## Contribute
 Feel free to contribute and create pull requests. We will review and merge them.
 
