@@ -1,3 +1,5 @@
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/outline)](https://artifacthub.io/packages/search?repo=outline)
+
 # Outline wiki helm chart
 This helm chart provides you with a ready to use [outline wiki](https://github.com/outline/outline) stack ready to deploy in your kubernetes cluster.
 It provides:
