@@ -1,16 +1,20 @@
-image: alpine/helm:3.6.3
-
 stages:
   - lint
   - package
   - upload
 
 lint:
+  image:
+    name: alpine/helm:3.6.3
+    entrypoint: ["/bin/sh", "-c"]
   stage: lint
   script:
-    - 'helm lint'
+    - 'helm lint .'
 
 package:
+  image:
+    name: alpine/helm:3.6.3
+    entrypoint: [ "/bin/sh", "-c" ]
   stage: package
   script:
     - 'helm package -u ./'
