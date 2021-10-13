@@ -3,3 +3,7 @@ name: outline
 description: The outline helm chart to deploy outline in kubernetes clusters.
 version: 0.0.2
 appVersion: 0.0.1
+home: https://encircle360.com
+sources:
+  - https://gitlab.com/encircle360-oss/helm-charts/outline
+  - https://github.com/encircle360-oss/outline-helm-chart
