@@ -17,10 +17,13 @@ package:
     entrypoint: ["/bin/sh", "-c"]
   stage: package
   script:
-    - 'helm package -u ./'
+    - 'helm package -u -d build/ .'
+  artifacts:
+    paths:
+      - build/
 
 upload:
   image: curlimages/curl:latest
   stage: upload
   script:
-    - 'curl --request POST --user gitlab-ci-token:$CI_JOB_TOKEN --form "chart=@outline-0.0.2.tgz" "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/helm/api/stable/charts"'
+    - 'curl --request POST --user gitlab-ci-token:$CI_JOB_TOKEN --form "chart=@build/outline-0.0.2.tgz" "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/helm/api/stable/charts"'
