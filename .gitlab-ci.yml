@@ -14,7 +14,7 @@ lint:
 package:
   image:
     name: alpine/helm:3.6.3
-    entrypoint: [ "/bin/sh", "-c" ]
+    entrypoint: ["/bin/sh", "-c"]
   stage: package
   script:
     - 'helm package -u ./'
@@ -23,4 +23,4 @@ upload:
   image: curlimages/curl:latest
   stage: upload
   script:
-    - 'curl --request POST --user gitlab-ci-token:$CI_JOB_TOKEN --form "chart=@outline-*.tgz" "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/helm/api/stable/charts"'
+    - 'curl --request POST --user gitlab-ci-token:$CI_JOB_TOKEN --form "chart=@outline-0.0.2.tgz" "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/helm/api/stable/charts"'
