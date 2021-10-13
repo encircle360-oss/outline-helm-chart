@@ -1,7 +1,7 @@
 apiVersion: v1
 name: outline
 description: The outline helm chart to deploy outline in kubernetes clusters.
-version: 0.0.2
+version: 0.0.3
 appVersion: 0.0.1
 home: https://encircle360.com
 sources:
