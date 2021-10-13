@@ -1,0 +1,22 @@
+image: alpine/helm:3.6
+
+stages:
+  - lint
+  - package
+  - upload
+
+lint:
+  stage: lint
+  script:
+    - 'helm lint'
+
+package:
+  stage: package
+  script:
+    - 'helm package -u ./'
+
+upload:
+  image: curlimages/curl:latest
+  stage: upload
+  script:
+    - 'curl --request POST --user gitlab-ci-token:$CI_JOB_TOKEN --form "chart=@outline-*.tgz" "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/helm/api/stable/charts"'
