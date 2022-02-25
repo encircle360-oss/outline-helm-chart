@@ -1,20 +1,28 @@
 name: outline
 image:
   repository: outlinewiki/outline
-  tag: 0.60.3
+  tag: 0.61.1
   pullPolicy: IfNotPresent
 replicas: 1
 env:
-  # SLACK_KEY: "slack key in slack oidc context"
-  # SLACK_SECRET: "slack secret in slack oidc context"
+  # SLACK_KEY: "slack client id"
+  # SLACK_SECRET: "slack client secret"
+  # SMTP_HOST: "mail.yourdomain.tld"
+  # SMTP_PORT: "465"
+  # SMTP_USERNAME: ""
+  # SMTP_PASSWORD: ""
+  # SMTP_FROM_EMAIL: ""
+  # SMTP_REPLY_EMAIL: ""
+  # SMTP_SECURE: "true"
 envSecrets:
-secretKey: "5974e36f82085f057223565ac2d0d01427a90248ade611108b4b937672649bd4" # MUST be replaced! Generate a hex-encoded 32-byte random key. You should use `openssl rand -hex 32`
-utilsSecret: "8c5a14973325ba56694a99856e6be330812b875e5f683dd37022cf76444774bb" # Generate a unique random key. The format is not important but you could still use `openssl rand -hex 32`
+secretKey: "generate_a_new_one" # MUST be replaced! Generate a hex-encoded 32-byte random key. You should use `openssl rand -hex 32`
+utilsSecret: "generate_a_new_one" # Generate a unique random key. The format is not important but you could still use `openssl rand -hex 32`
 
 ingress:
   host: outline.yourdomain.tld
   annotations: # set your custom ingress annotations here
     # cert-manager.io/cluster-issuer: "letsencrypt-staging"
+    kubernetes.io/tls-acme: "true"
   tls:
     enabled: false
 
@@ -45,16 +53,14 @@ minio:
   ingress:
     enabled: true
     hostname: data.outline.yourdomain.tld
-    certManager: false
     tls: false
     annotations:
       # cert-manager.io/cluster-issuer: "letsencrypt-staging"
   mode: "standalone"
   defaultBuckets: "ol-data" # should not be "outline" because of https://github.com/outline/outline/issues/2068
-  secretKey:
-    password: "Uk4LuwVFvRDiG6k4nYA5C^835V" # MUST be replaced with some custom generated secret! Don't use this in production
-  accessKey:
-    password: "zFPVNNK*QNp3^V4J38Gy76SehG" # MUST be replaced with some custom generated access_key! Don't use this in production
+  auth:
+    rootUser: "ocjBKyfyo2O2HfwhRlQOPWDgtZBFf9q6uQKhhri1wW" # MUST be replaced with some custom generated access_key! Don't use this in production
+    rootPassword: "Df6EvTHNdHl4HgqIMR2RU1aVtkRUdbdku4sKSuNI67" # MUST be replaced with some custom generated secret! Don't use this in production
   persistence:
     enabled: true
     storageClass: ""

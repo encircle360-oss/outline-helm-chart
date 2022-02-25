@@ -54,17 +54,17 @@ spec:
             {{ end }}
             {{ if .Values.minio.enabled }}
             - name: AWS_ACCESS_KEY_ID
-              value: {{ .Values.minio.accessKey.password | quote }}
+              value: {{ .Values.minio.auth.rootUser | quote }}
             - name: AWS_SECRET_ACCESS_KEY
-              value: {{ .Values.minio.secretKey.password | quote }}
+              value: {{ .Values.minio.auth.rootPassword | quote }}
             - name: AWS_REGION
               value: "us-east-1"
             {{ if .Values.minio.ingress.tls }}
             - name: AWS_S3_UPLOAD_BUCKET_URL
-              value: "https://{{ .Values.minio.ingress.hostname }}"
+              value: "https://{{ .Values.minio.apiIngress.hostname }}"
             {{ else }}
             - name: AWS_S3_UPLOAD_BUCKET_URL
-              value: "http://{{ .Values.minio.ingress.hostname }}"
+              value: "http://{{ .Values.minio.apiIngress.hostname }}"
             {{ end }}
             - name: AWS_S3_UPLOAD_BUCKET_NAME
               value: {{ .Values.minio.defaultBuckets | quote }}
@@ -124,17 +124,17 @@ spec:
           {{ end }}
           {{ if .Values.minio.enabled }}
             - name: AWS_ACCESS_KEY_ID
-              value: {{ .Values.minio.accessKey.password | quote }}
+              value: {{ .Values.minio.auth.rootUser | quote }}
             - name: AWS_SECRET_ACCESS_KEY
-              value: {{ .Values.minio.secretKey.password | quote }}
+              value: {{ .Values.minio.auth.rootPassword | quote }}
             - name: AWS_REGION
               value: "us-east-1"
             {{ if .Values.minio.ingress.tls }}
             - name: AWS_S3_UPLOAD_BUCKET_URL
-              value: "https://{{ .Values.minio.ingress.hostname }}"
+              value: "https://{{ .Values.minio.apiIngress.hostname }}"
             {{ else }}
             - name: AWS_S3_UPLOAD_BUCKET_URL
-              value: "http://{{ .Values.minio.ingress.hostname }}"
+              value: "http://{{ .Values.minio.apiIngress.hostname }}"
             {{ end }}
             - name: AWS_S3_UPLOAD_BUCKET_NAME
               value: {{ .Values.minio.defaultBuckets | quote }}
@@ -180,7 +180,7 @@ spec:
 
 ---
 
-apiVersion: networking.k8s.io/v1
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: {{ .Values.name }}
@@ -202,9 +202,7 @@ spec:
       http:
         paths:
           - path: /
-            pathType: Prefix
+#            pathType: Prefix
             backend:
-              service:
-                name: {{ .Values.name }}
-                port:
-                  name: web
+              serviceName: {{ .Values.name }}
+              servicePort: web
