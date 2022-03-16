@@ -84,6 +84,28 @@ The path for the policy targets the `public` directory in the outline s3 bucket.
 
 You can also use the web ui and add a `Access Rule` under your bucket with prefix `public` and access `readonly`.
 
+## Upgrades Notes
+
+### From 0.0.4 to 0.0.5
+
+Please be aware that we upgraded the minio chart version to 10.1.12. There is a change in the authentication credentials values in values.yaml. 
+You must change your values while upgrading.
+
+Before:
+```yaml
+secretKey:
+  password: "YOUR_SECRET_KEY"
+accessKey:
+  password: "YOUR_ACCESS_KEY"
+```
+
+Now (values.yaml#61):
+```yaml
+auth:
+  rootUser: "YOUR_ACCESS_KEY"
+  rootPassword: "YOUR_SECRET_KEY"
+```
+
 ## Contribute
 Feel free to contribute and create pull requests. We will review and merge them.
 
