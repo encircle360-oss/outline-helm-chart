@@ -40,8 +40,8 @@ postgresql:
   architecture: "standalone"
   postgresqlDatabase: "outline"
   postgresqlUsername: "outline"
-  postgresqlPassword: "vh4rf^q32BcvtFqFVjny4pnM" # MUST be replaced with some secret password! Don't use this in production
-  postgresqlPostgresPassword: "Ma#wXFMz6jFqXUr^qP&K66XQbd" # MUST be replaced with some secret password! Don't use this in production
+  postgresqlPassword: "change_me" # MUST be replaced with some secret password! Don't use this in production
+  postgresqlPostgresPassword: "change_me" # MUST be replaced with some secret password! Don't use this in production
   persistence:
     enabled: true
     storageClass: ""
@@ -59,8 +59,8 @@ minio:
   mode: "standalone"
   defaultBuckets: "ol-data" # should not be "outline" because of https://github.com/outline/outline/issues/2068
   auth:
-    rootUser: "ocjBKyfyo2O2HfwhRlQOPWDgtZBFf9q6uQKhhri1wW" # MUST be replaced with some custom generated access_key! Don't use this in production
-    rootPassword: "Df6EvTHNdHl4HgqIMR2RU1aVtkRUdbdku4sKSuNI67" # MUST be replaced with some custom generated secret! Don't use this in production
+    rootUser: "change_me" # MUST be replaced with some custom generated access_key! Don't use this in production
+    rootPassword: "change_me" # MUST be replaced with some custom generated secret! Don't use this in production
   persistence:
     enabled: true
     storageClass: ""
