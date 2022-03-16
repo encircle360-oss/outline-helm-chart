@@ -22,7 +22,7 @@ ingress:
   host: outline.yourdomain.tld
   annotations: # set your custom ingress annotations here
     # cert-manager.io/cluster-issuer: "letsencrypt-staging"
-    kubernetes.io/tls-acme: "true"
+    # kubernetes.io/tls-acme: "true"
   tls:
     enabled: false
 
