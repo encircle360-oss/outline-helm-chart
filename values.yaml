@@ -1,7 +1,7 @@
 name: outline
 image:
   repository: outlinewiki/outline
-  tag: 0.60.3
+  tag: 0.62.0
   pullPolicy: IfNotPresent
 replicas: 1
 env:
