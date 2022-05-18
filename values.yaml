@@ -21,9 +21,10 @@ ingress:
 redis:
   enabled: true
   architecture: "standalone"
-  persistence:
-    size: 2Gi
-    storageClass: ""
+  master:
+    persistence:
+      size: 2Gi
+      storageClass: ""
   auth:
     enabled: false
 
