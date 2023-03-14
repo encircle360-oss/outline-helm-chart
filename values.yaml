@@ -36,6 +36,23 @@ service:
   type: ClusterIP
   port: 80
 
+startupProbe:
+  httpGet:
+    path: /_health
+    port: http
+  failureThreshold: 10
+  periodSeconds: 1
+
+livenessProbe:
+  httpGet:
+    path: /_health
+    port: http
+
+readinessProbe:
+  httpGet:
+    path: /_health
+    port: http
+
 env:
   # SLACK_KEY: "slack key in slack oidc context"
   # SLACK_SECRET: "slack secret in slack oidc context"
@@ -83,6 +100,10 @@ collaboration:
   service:
     type: ClusterIP
     port: 80
+
+  startupProbe: {}
+  livenessProbe: {}
+  readinessProbe: {}
 
   nodeSelector: {}
   tolerations: []

@@ -39,14 +39,12 @@ spec:
             - name: http
               containerPort: 3000
               protocol: TCP
+          startupProbe:
+            {{- toYaml (merge .Values.collaboration.startupProbe .Values.startupProbe) | nindent 12 }}
           livenessProbe:
-            httpGet:
-              path: /_health
-              port: http
+            {{- toYaml (merge .Values.collaboration.livenessProbe .Values.livenessProbe) | nindent 12 }}
           readinessProbe:
-            httpGet:
-              path: /_health
-              port: http
+            {{- toYaml (merge .Values.collaboration.readinessProbe .Values.readinessProbe) | nindent 12 }}
           resources:
             {{- toYaml .Values.collaboration.resources | nindent 12 }}
           env:
