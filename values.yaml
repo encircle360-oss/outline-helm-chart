@@ -41,7 +41,7 @@ startupProbe:
     path: /_health
     port: http
   failureThreshold: 10
-  periodSeconds: 1
+  periodSeconds: 5
 
 livenessProbe:
   httpGet:
@@ -94,6 +94,8 @@ nodeSelector: {}
 tolerations: []
 affinity: {}
 
+# Run collaboration service as dedicated deployment
+# https://github.com/outline/outline/blob/main/docs/SERVICES.md#collaboration
 collaboration:
   enabled: false
 
@@ -104,6 +106,22 @@ collaboration:
   startupProbe: {}
   livenessProbe: {}
   readinessProbe: {}
+
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  resources: {}
+
+# Run daily cronjob
+# https://wiki.generaloutline.com/s/hosting/doc/scheduled-jobs-RhZzCt770H
+cron:
+  enabled: true
+  schedule: "@daily"
+
+  image:
+    repository: curlimages/curl
+    tag: "7.88.1"
+    pullPolicy: IfNotPresent
 
   nodeSelector: {}
   tolerations: []
