@@ -1,0 +1,57 @@
+{{- if .Values.cron.enabled }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "outline.fullname" . }}-cron
+  labels:
+    {{- include "outline.labels" . | nindent 4 }}
+    app.kubernetes.io/component: cron
+spec:
+  schedule: "{{ .Values.cron.schedule }}"
+  jobTemplate:
+    metadata:
+      labels:
+        {{- include "outline.labels" . | nindent 8 }}
+        app.kubernetes.io/component: cron
+    spec:
+      template:
+        metadata:
+          labels:
+            {{- include "outline.labels" . | nindent 12 }}
+            app.kubernetes.io/component: cron
+        spec:
+          {{- with .Values.imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          serviceAccountName: {{ include "outline.serviceAccountName" . }}
+          securityContext:
+            {{- toYaml .Values.podSecurityContext | nindent 12 }}
+          containers:
+            - name: cron
+              securityContext:
+                {{- toYaml .Values.securityContext | nindent 16 }}
+              image: "{{ .Values.cron.image.repository }}:{{ .Values.cron.image.tag}}"
+              imagePullPolicy: {{ .Values.cron.image.pullPolicy }}
+              env:
+                {{- include "outline.env" . | nindent 16 }}
+              args:
+                - "-s"
+                - "--fail-with-body"
+                - "http://{{ include "outline.fullname" . }}:{{ .Values.service.port}}/api/cron.daily?token=$(UTILS_SECRET)"
+              resources:
+                {{- toYaml .Values.cron.resources | nindent 16 }}
+          {{- with .Values.cron.nodeSelector }}
+          nodeSelector:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.cron.affinity }}
+          affinity:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.cron.tolerations }}
+          tolerations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          restartPolicy: OnFailure
+{{- end }}

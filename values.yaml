@@ -1,22 +1,132 @@
 name: outline
 image:
   repository: outlinewiki/outline
-  tag: 0.69.1
+  tag: ""
   pullPolicy: IfNotPresent
+
 replicas: 1
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 80
+
+startupProbe:
+  httpGet:
+    path: /_health
+    port: http
+  failureThreshold: 10
+  periodSeconds: 5
+
+livenessProbe:
+  httpGet:
+    path: /_health
+    port: http
+
+readinessProbe:
+  httpGet:
+    path: /_health
+    port: http
+
 env:
   # SLACK_KEY: "slack key in slack oidc context"
   # SLACK_SECRET: "slack secret in slack oidc context"
+
 envSecrets:
 secretKey: "5974e36f82085f057223565ac2d0d01427a90248ade611108b4b937672649bd4" # MUST be replaced! Generate a hex-encoded 32-byte random key. You should use `openssl rand -hex 32`
 utilsSecret: "8c5a14973325ba56694a99856e6be330812b875e5f683dd37022cf76444774bb" # Generate a unique random key. The format is not important but you could still use `openssl rand -hex 32`
 
 ingress:
+  enabled: true
   host: outline.yourdomain.tld
-  annotations: # set your custom ingress annotations here
-    # cert-manager.io/cluster-issuer: "letsencrypt-staging"
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
   tls:
     enabled: false
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+# Run collaboration service as dedicated deployment
+# https://github.com/outline/outline/blob/main/docs/SERVICES.md#collaboration
+collaboration:
+  enabled: false
+
+  service:
+    type: ClusterIP
+    port: 80
+
+  startupProbe: {}
+  livenessProbe: {}
+  readinessProbe: {}
+
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  resources: {}
+
+# Run daily cronjob
+# https://wiki.generaloutline.com/s/hosting/doc/scheduled-jobs-RhZzCt770H
+cron:
+  enabled: true
+  schedule: "@daily"
+
+  image:
+    repository: curlimages/curl
+    tag: "7.88.1"
+    pullPolicy: IfNotPresent
+
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  resources: {}
 
 redis:
   enabled: true
@@ -59,5 +169,3 @@ minio:
     enabled: true
     storageClass: ""
     size: 2Gi
-
-
