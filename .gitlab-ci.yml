@@ -28,7 +28,7 @@ upload-beta:
   image: curlimages/curl:latest
   stage: upload
   script:
-    - 'curl --request POST --user gitlab-ci-token:$CI_JOB_TOKEN --form "chart=@build/outline-0.0.7.tgz" "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/helm/api/beta/charts"'
+    - 'curl --request POST --user gitlab-ci-token:$CI_JOB_TOKEN --form "chart=@build/outline-0.1.0.tgz" "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/helm/api/beta/charts"'
 
 upload-stable:
   only:
@@ -36,4 +36,4 @@ upload-stable:
   image: curlimages/curl:latest
   stage: upload
   script:
-    - 'curl --request POST --user gitlab-ci-token:$CI_JOB_TOKEN --form "chart=@build/outline-0.0.7.tgz" "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/helm/api/stable/charts"'
+    - 'curl --request POST --user gitlab-ci-token:$CI_JOB_TOKEN --form "chart=@build/outline-0.1.0.tgz" "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/helm/api/stable/charts"'
