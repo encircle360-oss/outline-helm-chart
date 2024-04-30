@@ -1,0 +1,19 @@
+{{- if .Values.collaboration.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "outline.fullname" . }}-collaboration
+  labels:
+    {{- include "outline.labels" . | nindent 4 }}
+    app.kubernetes.io/component: collaboration
+spec:
+  type: {{ .Values.collaboration.service.type }}
+  ports:
+    - port: {{ .Values.collaboration.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "outline.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: collaboration
+{{- end }}
