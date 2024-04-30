@@ -35,10 +35,6 @@ spec:
               imagePullPolicy: {{ .Values.cron.image.pullPolicy }}
               env:
                 {{- include "outline.env" . | nindent 16 }}
-              {{- with .Values.envFrom }}
-              envFrom:
-                {{- toYaml . | nindent 16 }}
-              {{- end }}
               args:
                 - "-s"
                 - "--fail-with-body"

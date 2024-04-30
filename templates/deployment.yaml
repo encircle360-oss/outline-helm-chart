@@ -54,10 +54,6 @@ spec:
             - name: SERVICES
               value: websockets,worker,web
             {{- end }}
-          {{- with .Values.envFrom }}
-          envFrom:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

@@ -65,14 +65,10 @@ Create the name of the service account to use
 Shared env for all services
 */}}
 {{- define "outline.env" -}}
-{{- with .Values.secretKey }}
 - name: SECRET_KEY
-  value: {{ . | quote }}
-{{- end }}
-{{- with .Values.utilsSecret }}
+  value: {{ .Values.secretKey | quote }}
 - name: UTILS_SECRET
-  value: {{ . | quote }}
-{{- end }}
+  value: {{ .Values.utilsSecret | quote }}
 - name: PORT
   value: "3000"
 - name: COLLABORATION_URL

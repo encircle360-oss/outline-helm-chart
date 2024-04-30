@@ -51,10 +51,6 @@ spec:
             {{- include "outline.env" . | nindent 12 }}
             - name: SERVICES
               value: collaboration
-          {{- with .Values.envFrom }}
-          envFrom:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
       {{- with .Values.collaboration.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
