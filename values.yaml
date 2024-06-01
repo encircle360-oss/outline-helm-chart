@@ -4,6 +4,7 @@ image:
   tag: 0.69.1
   pullPolicy: IfNotPresent
 replicas: 1
+resources: {}
 env:
   # SLACK_KEY: "slack key in slack oidc context"
   # SLACK_SECRET: "slack secret in slack oidc context"
