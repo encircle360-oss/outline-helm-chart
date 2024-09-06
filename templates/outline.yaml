@@ -87,6 +87,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - containerPort: 3000
+          resources: {{- toYaml .Values.resources | nindent 12 }}
 ---
 
 apiVersion: v1
