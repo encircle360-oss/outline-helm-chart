@@ -33,6 +33,5 @@ jobs:
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         with:
-          multi_dir: lib-charts,deps-charts,charts
           skip_existing: true
           packages_with_index: true
