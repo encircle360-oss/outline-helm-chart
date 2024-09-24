@@ -1,0 +1,38 @@
+name: Release Charts
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types: [labeled]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.label.name == 'release_charts' || github.ref_name == 'master' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+          ls -la
+
+      - name: Install Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: v3.11.3
+
+      - name: release charts
+        uses: amalgamm/chart-releaser-action@v1.6.3
+        env:
+          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+        with:
+          multi_dir: lib-charts,deps-charts,charts
+          skip_existing: true
+          packages_with_index: true
