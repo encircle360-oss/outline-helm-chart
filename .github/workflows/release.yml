@@ -3,14 +3,14 @@ name: Release Charts
 on:
   push:
     branches:
-      - main
+      - master
   pull_request:
     types: [labeled]
 
 jobs:
   release:
     runs-on: ubuntu-latest
-    if: ${{ github.event.label.name == 'release_charts' || github.ref_name == 'main' }}
+    if: ${{ github.event.label.name == 'release_charts' || github.ref_name == 'master' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
